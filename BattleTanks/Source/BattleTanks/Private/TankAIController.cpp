@@ -21,10 +21,6 @@ void ATankAIController::BeginPlay()
 	{
 		UE_LOG(LogTemp, Warning, TEXT("AI Tank %s , can't find player tank"), *this->GetName())
 	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("AI Tank %s , found player tank %s"), *this->GetName(), *playerTank->GetName())
-	}
 
 	
 }
