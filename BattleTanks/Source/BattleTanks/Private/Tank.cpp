@@ -1,7 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Tank.h"
-
+#include "TankAimingComponent.h"
+#include "TankBarrelComponent.h"
+#include "TankTurretComponent.h"
 
 // Sets default values
 ATank::ATank()
@@ -10,11 +12,22 @@ ATank::ATank()
 	PrimaryActorTick.bCanEverTick = true;
 
 	TankAimingComponent = CreateDefaultSubobject<UTankAimingComponent>(FName("Aiming Component"));
+	TankAimingComponent->SetAimLow(UseLowerArc);
 }
 
-void ATank::SetBarrelReference(UStaticMeshComponent* Barrel)
+void ATank::SetBarrelReference(UTankBarrelComponent* Barrel)
 {
 	TankAimingComponent->SetBarrelReference(Barrel);
+}
+
+void ATank::SetTurretReference(UTankTurretComponent* Turret)
+{
+	TankAimingComponent->SetTurretReference(Turret);
+}
+
+void ATank::SetUseLowerArc(bool value)
+{
+	TankAimingComponent->SetAimLow(value);
 }
 
 // Called when the game starts or when spawned

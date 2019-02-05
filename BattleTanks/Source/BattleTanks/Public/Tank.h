@@ -2,10 +2,13 @@
 
 #pragma once
 
-#include "TankAimingComponent.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
 #include "Tank.generated.h"
+
+class UTankAimingComponent;
+class UTankBarrelComponent;
+class UTankTurretComponent;
 
 UCLASS()
 class BATTLETANKS_API ATank : public APawn
@@ -17,7 +20,13 @@ public:
 	ATank();
 
 	UFUNCTION(BlueprintCallable, Category = Setup)
-	void SetBarrelReference(UStaticMeshComponent* Barrel);
+	void SetBarrelReference(UTankBarrelComponent* Barrel);
+	
+	UFUNCTION(BlueprintCallable, Category = Setup)
+	void SetTurretReference(UTankTurretComponent* Turret);
+
+	UFUNCTION(BlueprintCallable, Category = Firing)
+	void SetUseLowerArc(bool UseLowerArc);
 
 protected:
 	// Called when the game starts or when spawned
@@ -37,6 +46,9 @@ public:
 	//fire speed in cm.
 	UPROPERTY(EditAnywhere, Category = Firing)
 	float ProjectileVelocity = 10000.0f;
+
+	UPROPERTY(EditAnywhere, Category = Firing)
+	bool UseLowerArc = true;
 	
 };
 
