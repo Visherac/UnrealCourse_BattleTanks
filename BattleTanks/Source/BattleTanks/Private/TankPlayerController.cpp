@@ -1,6 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
+
 #include "TankPlayerController.h"
+#include "Engine/World.h"
 
 void ATankPlayerController::BeginPlay()
 {
@@ -32,10 +34,8 @@ void ATankPlayerController::AimTowardsCrosshair()
 	FVector HitLocation;
 	if (GetSightRayHitLocation(HitLocation))
 	{
-		//UE_LOG(LogTemp, Warning, TEXT("hit location: %s"), *HitLocation.ToString())
+		GetControlledTank()->AimAt(HitLocation);
 	}
-
-
 }
 
 //True if hits landscape, location of position hit
@@ -45,12 +45,25 @@ bool ATankPlayerController::GetSightRayHitLocation(FVector &HitLocation) const
 	FVector LookDirection;
 	if (GetLookDirection(LookDirection))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("look direction : %s"), *LookDirection.ToString())
+		FHitResult CrosshairHit;
+		FVector StartLocation = PlayerCameraManager->GetCameraLocation();
+		FVector EndLocation = StartLocation + (LookDirection * RayTraceDistance);
+		auto HitParams = FCollisionQueryParams("TankCrosshairCollision", false, GetPawn());
+		bool WasHit = GetWorld()->LineTraceSingleByChannel(CrosshairHit, StartLocation, EndLocation, ECollisionChannel::ECC_Visibility, HitParams);
+		if (WasHit)
+		{
+			HitLocation = CrosshairHit.Location;
+		}
+		else
+		{
+			HitLocation = FVector(0);
+		}
+		return WasHit;
 	}
-	
-
-	return true;
+	return false;
 }
+
+
 
 //world direction as looking out crosshair
 bool ATankPlayerController::GetLookDirection(FVector& LookDirection) const

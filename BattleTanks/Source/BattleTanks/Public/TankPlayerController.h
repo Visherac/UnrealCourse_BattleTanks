@@ -31,5 +31,8 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	float CrosshairPercentageY = .332f;
+
+	UPROPERTY(EditAnywhere)
+	float RayTraceDistance = 1000000.0f;
 	
 };
