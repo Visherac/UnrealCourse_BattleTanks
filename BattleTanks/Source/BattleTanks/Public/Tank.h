@@ -8,6 +8,7 @@
 
 class UTankAimingComponent;
 class UTankBarrelComponent;
+class ATankProjectile;
 class UTankTurretComponent;
 
 UCLASS()
@@ -28,15 +29,13 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Firing)
 	void SetUseLowerArc(bool UseLowerArc);
 
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
+	UFUNCTION(BlueprintCallable, Category = Firing)
+	void Fire();
 
+protected:
 	UTankAimingComponent* TankAimingComponent = nullptr;
 
 public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
@@ -49,7 +48,11 @@ public:
 
 	UPROPERTY(EditAnywhere, Category = Firing)
 	bool UseLowerArc = true;
+
+	UPROPERTY(EditAnywhere, Category = Firing)
+	TSubclassOf<ATankProjectile> ProjectileBlueprint;
 	
+	UTankBarrelComponent* Barrel = nullptr;
 };
 
 

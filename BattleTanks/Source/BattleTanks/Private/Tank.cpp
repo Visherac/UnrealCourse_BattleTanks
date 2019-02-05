@@ -4,6 +4,8 @@
 #include "TankAimingComponent.h"
 #include "TankBarrelComponent.h"
 #include "TankTurretComponent.h"
+#include "TankProjectile.h"
+#include "Engine/World.h"
 
 // Sets default values
 ATank::ATank()
@@ -15,9 +17,10 @@ ATank::ATank()
 	TankAimingComponent->SetAimLow(UseLowerArc);
 }
 
-void ATank::SetBarrelReference(UTankBarrelComponent* Barrel)
+void ATank::SetBarrelReference(UTankBarrelComponent* BarrelToSet)
 {
-	TankAimingComponent->SetBarrelReference(Barrel);
+	TankAimingComponent->SetBarrelReference(BarrelToSet);
+	Barrel = BarrelToSet;
 }
 
 void ATank::SetTurretReference(UTankTurretComponent* Turret)
@@ -30,18 +33,13 @@ void ATank::SetUseLowerArc(bool value)
 	TankAimingComponent->SetAimLow(value);
 }
 
-// Called when the game starts or when spawned
-void ATank::BeginPlay()
+void ATank::Fire()
 {
-	Super::BeginPlay();
-	
-}
-
-// Called every frame
-void ATank::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
+	UE_LOG(LogTemp, Warning, TEXT("TANK FIRED"))
+	if (Barrel)
+	{
+		GetWorld()->SpawnActor<ATankProjectile>(ProjectileBlueprint, Barrel->GetBarrelEndLocation(), Barrel->GetForwardVector().Rotation());
+	}
 }
 
 // Called to bind functionality to input
