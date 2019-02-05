@@ -14,3 +14,8 @@ void UTankBarrelComponent::Elevate(float RelativeDirection)
 	SetRelativeRotation(FRotator(NewRotationClamped, 0, 0));
 
 }
+
+FVector UTankBarrelComponent::GetBarrelEndLocation() const
+{
+	return GetSocketLocation(BarrelEndSocket);
+}

@@ -19,6 +19,8 @@ class BATTLETANKS_API UTankBarrelComponent : public UStaticMeshComponent
 public:
 	//-1 means down, 1 means up. 0 means don't elevate ...etc
 	void Elevate(float RelativeDirection);
+
+	FVector GetBarrelEndLocation() const;
 	
 private:
 	
