@@ -33,7 +33,7 @@ void UTankAimingComponent::SetAimLow(bool AimLow)
 
 void UTankAimingComponent::AimAt(FVector HitLocation, float ProjectileVelocity)
 {
-	if (Barrel && Turret)
+	if (Barrel)  //ToDo barrel and turret
 	{
 		FVector StartLocation = Barrel->GetSocketLocation(FName("BarrelEnd"));//TODO remove dependency on socket name.
 		FVector OutVelocity(0);
@@ -64,7 +64,9 @@ void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection)
 	{
 		auto BarrelRotator = Barrel->GetForwardVector().Rotation();
 		auto AimRotator = AimDirection.Rotation();
-		auto deltaRotator = AimRotator - BarrelRotator;
+		auto DeltaRotator = AimRotator - BarrelRotator;
+
+		Barrel->Elevate(DeltaRotator.Pitch);
 
 
 	}

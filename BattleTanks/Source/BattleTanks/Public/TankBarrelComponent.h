@@ -16,6 +16,9 @@ class BATTLETANKS_API UTankBarrelComponent : public UStaticMeshComponent
 {
 	GENERATED_BODY()
 	
+public:
+	//-1 means down, 1 means up. 0 means don't elevate ...etc
+	void Elevate(float RelativeDirection);
 	
 private:
 	
