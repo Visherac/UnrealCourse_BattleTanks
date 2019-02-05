@@ -24,16 +24,16 @@ public:
 	
 private:
 	
-	UPROPERTY(EditAnywhere, Category = Barrel)
+	UPROPERTY(EditDefaultsOnly, Category = Barrel)
 	float ElevationSpeed = 20.0f;
 
-	UPROPERTY(EditAnywhere, Category = Barrel)
+	UPROPERTY(EditDefaultsOnly, Category = Barrel)
 	float MinElevation = 0.0f;
 
-	UPROPERTY(EditAnywhere, Category = Barrel)
+	UPROPERTY(EditDefaultsOnly, Category = Barrel)
 	float MaxElevation = 40.0f;
 
-	UPROPERTY(EditAnywhere, Category = Barrel)
+	UPROPERTY(EditDefaultsOnly, Category = Barrel)
 	FName BarrelEndSocket = "";
 
 };

@@ -32,27 +32,30 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Firing)
 	void Fire();
 
+	void AimAt(FVector HitLocation);
+
 protected:
 	UTankAimingComponent* TankAimingComponent = nullptr;
 
 public:	
-
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
-	void AimAt(FVector HitLocation);
-	
 	//fire speed in cm.
-	UPROPERTY(EditAnywhere, Category = Firing)
+	UPROPERTY(EditDefaultsOnly, Category = Firing)
 	float ProjectileVelocity = 10000.0f;
 
-	UPROPERTY(EditAnywhere, Category = Firing)
+	UPROPERTY(EditDefaultsOnly, Category = Firing)
 	bool UseLowerArc = true;
 
-	UPROPERTY(EditAnywhere, Category = Firing)
+	UPROPERTY(EditDefaultsOnly, Category = Firing)
 	TSubclassOf<ATankProjectile> ProjectileBlueprint;
 	
+	UPROPERTY(EditDefaultsOnly, Category = Firing)
+	float ReloadTime = 3.0f;
+
+private:
 	UTankBarrelComponent* Barrel = nullptr;
+
+	double LastFiredTime = 0;
+
 };
 
 

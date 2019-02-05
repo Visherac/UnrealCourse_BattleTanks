@@ -21,6 +21,6 @@ public:
 
 private:
 
-	UPROPERTY(EditAnywhere, Category = Turret)
+	UPROPERTY(EditDefaultsOnly, Category = Turret)
 	float SwivelSpeed = 50.0f;
 };

@@ -21,6 +21,7 @@ public:
 	virtual void Tick(float) override;
 
 private:
-	ATank* GetControlledTank() const;
-	ATank* GetPlayerTank() const;
+	
+
+
 };

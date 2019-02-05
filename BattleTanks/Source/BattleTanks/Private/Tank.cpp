@@ -35,19 +35,18 @@ void ATank::SetUseLowerArc(bool value)
 
 void ATank::Fire()
 {
-	UE_LOG(LogTemp, Warning, TEXT("TANK FIRED"))
-	if (Barrel)
+	UE_LOG(LogTemp, Warning, TEXT("TANK TRIED FIRED"))
+
+	bool IsReloaded = (FPlatformTime::Seconds() - LastFiredTime) >= ReloadTime;
+
+	if (Barrel && IsReloaded)
 	{
-		GetWorld()->SpawnActor<ATankProjectile>(ProjectileBlueprint, Barrel->GetBarrelEndLocation(), Barrel->GetForwardVector().Rotation());
+		auto Projectile = GetWorld()->SpawnActor<ATankProjectile>(ProjectileBlueprint, Barrel->GetBarrelEndLocation(), Barrel->GetForwardVector().Rotation());
+		Projectile->Launch(ProjectileVelocity);
+		LastFiredTime = FPlatformTime::Seconds();
 	}
 }
 
-// Called to bind functionality to input
-void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
-}
 
 void ATank::AimAt(FVector HitLocation)
 {

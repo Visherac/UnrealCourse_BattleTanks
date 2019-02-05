@@ -26,13 +26,13 @@ private:
 	bool GetSightRayHitLocation(FVector&) const;
 	bool GetLookDirection(FVector & LookDirection) const;
 	
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditDefaultsOnly)
 	float CrosshairPercentageX = .5f;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditDefaultsOnly)
 	float CrosshairPercentageY = .332f;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditDefaultsOnly)
 	float RayTraceDistance = 1000000.0f;
 	
 };
