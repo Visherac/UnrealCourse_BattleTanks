@@ -4,6 +4,7 @@
 #include "TankAimingComponent.h"
 #include "TankBarrelComponent.h"
 #include "TankTurretComponent.h"
+#include "TankMovementComponent.h"
 #include "TankProjectile.h"
 #include "Engine/World.h"
 
@@ -15,6 +16,7 @@ ATank::ATank()
 
 	TankAimingComponent = CreateDefaultSubobject<UTankAimingComponent>(FName("Aiming Component"));
 	TankAimingComponent->SetAimLow(UseLowerArc);
+
 }
 
 void ATank::SetBarrelReference(UTankBarrelComponent* BarrelToSet)
@@ -39,7 +41,7 @@ void ATank::Fire()
 
 	bool IsReloaded = (FPlatformTime::Seconds() - LastFiredTime) >= ReloadTime;
 
-	if (Barrel && IsReloaded)
+	if (Barrel && IsReloaded && ProjectileBlueprint)
 	{
 		auto Projectile = GetWorld()->SpawnActor<ATankProjectile>(ProjectileBlueprint, Barrel->GetBarrelEndLocation(), Barrel->GetForwardVector().Rotation());
 		Projectile->Launch(ProjectileVelocity);

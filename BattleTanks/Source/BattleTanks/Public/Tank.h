@@ -6,9 +6,11 @@
 #include "GameFramework/Pawn.h"
 #include "Tank.generated.h"
 
+//forward declarationss
 class UTankAimingComponent;
 class UTankBarrelComponent;
 class ATankProjectile;
+class UTankMovementComponent;
 class UTankTurretComponent;
 
 UCLASS()
@@ -36,6 +38,9 @@ public:
 
 protected:
 	UTankAimingComponent* TankAimingComponent = nullptr;
+	
+	//UPROPERTY(BlueprintReadOnly)
+	//UTankMovementComponent* TankMovementComponent = nullptr;
 
 public:	
 	//fire speed in cm.

@@ -11,7 +11,6 @@ void UTankTrackComponent::SetThrottle(float Throttle)
 	
 	auto RootComponent = Cast<UPrimitiveComponent>(GetOwner()->GetRootComponent());
 	auto ForceAmount = RootComponent->GetMass() * DrivingSpeed * 100 * Throttle;
-	UE_LOG(LogTemp, Warning, TEXT("Throttle Set to %f"), ForceAmount)
 	auto ForceVector = ForceAmount * GetForwardVector();
 	auto ForceLocation = GetComponentLocation();
 	
