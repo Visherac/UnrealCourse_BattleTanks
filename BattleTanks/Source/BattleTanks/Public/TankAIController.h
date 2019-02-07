@@ -22,6 +22,8 @@ public:
 
 private:
 	
-
+	//how clost can the tank get before it stops moving.
+	UPROPERTY(EditDefaultsOnly, Category = Movement)
+	float AcceptanceRadius = 3000; 
 
 };

@@ -19,6 +19,20 @@ void UTankMovementComponent::IntendMoveForward(float Magnitude)
 	}
 }
 
+void UTankMovementComponent::RequestDirectMove(const FVector& MoveVelocity, bool ForceMaxSpeed)
+{
+	auto TankForward = GetOwner()->GetActorForwardVector().GetSafeNormal();
+	auto TankRight = GetOwner()->GetActorRightVector().GetSafeNormal();
+	auto IntendedMove = MoveVelocity.GetSafeNormal();
+	float TankForwardAmount = FVector::DotProduct(TankForward, IntendedMove);
+	float TankRightAmount = FVector::DotProduct(TankRight, IntendedMove);
+
+	IntendMoveForward(TankForwardAmount);
+	IntendRotateClockwise(TankRightAmount);
+
+	//UE_LOG(LogTemp, Warning, TEXT("Moving AI, %s"), *MoveVelocity.ToString())
+}
+
 void UTankMovementComponent::IntendRotateClockwise(float Magnitude)
 {
 	if (RightTrack && LeftTrack)

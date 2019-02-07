@@ -26,6 +26,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Movement)
 	void IntendRotateClockwise(float Magnitude);
 
+	virtual void RequestDirectMove(const FVector&, bool) override;
+
 private:
 	UTankTrackComponent* RightTrack = nullptr;
 	UTankTrackComponent* LeftTrack = nullptr;
