@@ -6,6 +6,16 @@
 #include "Components/ActorComponent.h"
 #include "TankAimingComponent.generated.h"
 
+UENUM()
+enum class EFiringState : uint8
+{
+	Reloading,
+	Aiming,
+	Locked
+};
+
+
+//forward declarations
 class UTankBarrelComponent;
 class UTankTurretComponent;
 
@@ -22,10 +32,16 @@ public:
 	void SetAimLow(bool);
 	void AimAt(FVector, float);
 
+protected:
+	UPROPERTY(BlueprintReadOnly, Category = State)
+	EFiringState AimingStatus = EFiringState::Reloading;
+
+
 private:
 	UTankBarrelComponent* Barrel = nullptr;
 	UTankTurretComponent* Turret = nullptr;
 
+	
 	//Will use the lower arc for firing projecile, else use the higher arc.
 	bool UseLowArc = true;
 	
