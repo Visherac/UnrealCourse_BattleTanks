@@ -29,8 +29,6 @@ void UTankMovementComponent::RequestDirectMove(const FVector& MoveVelocity, bool
 
 	IntendMoveForward(TankForwardAmount);
 	IntendRotateClockwise(TankRightAmount);
-
-	//UE_LOG(LogTemp, Warning, TEXT("Moving AI, %s"), *MoveVelocity.ToString())
 }
 
 void UTankMovementComponent::IntendRotateClockwise(float Magnitude)

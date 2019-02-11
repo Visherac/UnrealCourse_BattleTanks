@@ -10,7 +10,7 @@ void ATankAIController::BeginPlay()
 {
 	Super::BeginPlay();	
 
-	AimingComponent = GetPawn()->FindComponentByClass<UTankAimingComponent>();
+	auto AimingComponent = GetPawn()->FindComponentByClass<UTankAimingComponent>();
 }
 
 void ATankAIController::Tick(float DeltaTime)
@@ -18,7 +18,8 @@ void ATankAIController::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	auto PlayerTank = GetWorld()->GetFirstPlayerController()->GetPawn();
-	
+	auto AimingComponent = GetPawn()->FindComponentByClass<UTankAimingComponent>();
+
 	if (ensure(PlayerTank))
 	{
 		//movement
@@ -26,7 +27,8 @@ void ATankAIController::Tick(float DeltaTime)
 
 		//aiming
 		AimingComponent->AimAt(PlayerTank->GetActorLocation());
-		AimingComponent->Fire();
+
+		//AimingComponent->Fire(); TODO uncomment once we want the ai to fire again
 	}
 	
 }
