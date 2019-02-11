@@ -111,6 +111,11 @@ void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection)
 	}
 }
 
+EFiringState UTankAimingComponent::GetAimingState() const
+{
+	return AimingStatus;
+}
+
 void UTankAimingComponent::MoveTurretTowards(FVector AimDirection)
 {
 	if (ensure(Turret))
@@ -120,6 +125,14 @@ void UTankAimingComponent::MoveTurretTowards(FVector AimDirection)
 		auto AimRotator = AimDirection.Rotation();
 		auto DeltaRotator = AimRotator - TurretRotator;
 		
-		Turret->Swivel(DeltaRotator.Yaw);
+
+		if (DeltaRotator.Yaw)
+		{
+			Turret->Swivel(DeltaRotator.Yaw);
+		}
+		else
+		{
+			Turret->Swivel( - DeltaRotator.Yaw);
+		}
 	}
 }

@@ -41,8 +41,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Firing)
 	void Fire();
 
+	EFiringState GetAimingState() const;
 
-	
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = State)
 	EFiringState AimingStatus = EFiringState::Locked;
@@ -52,7 +52,6 @@ protected:
 private:
 	UTankBarrelComponent* Barrel = nullptr;
 	UTankTurretComponent* Turret = nullptr;
-
 
 	//Will use the lower arc for firing projecile, else use the higher arc.
 	UPROPERTY(EditDefaultsOnly = True, Category = Firing)
@@ -69,6 +68,9 @@ private:
 	float ReloadTime = 3.0f;
 
 	double LastFiredTime = 0;
+
+	///FUNCTIONS
+	
 
 	void MoveBarrelTowards(FVector);
 

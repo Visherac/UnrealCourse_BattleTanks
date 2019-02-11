@@ -20,10 +20,12 @@ public:
 	virtual void BeginPlay() override;
 	virtual void Tick(float) override;
 
-private:
-	
+protected:
 	//how clost can the tank get before it stops moving.
 	UPROPERTY(EditDefaultsOnly, Category = Movement)
-	float AcceptanceRadius = 3000; 
+	float AcceptanceRadius = 8000;
 
+private:
+	
+	
 };
