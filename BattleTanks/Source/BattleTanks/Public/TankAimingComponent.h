@@ -29,6 +29,8 @@ public:
 	// Sets default values for this component's properties
 	UTankAimingComponent();
 
+	virtual void BeginPlay() override;
+
 	UFUNCTION(BlueprintCallable, Category = Setup)
 	void Initialize(UTankBarrelComponent* BarrelToSet, UTankTurretComponent* TurretToSet);
 
@@ -45,10 +47,13 @@ protected:
 	UPROPERTY(BlueprintReadOnly, Category = State)
 	EFiringState AimingStatus = EFiringState::Locked;
 
+	virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction) override;
+
 private:
 	UTankBarrelComponent* Barrel = nullptr;
 	UTankTurretComponent* Turret = nullptr;
-	
+
+
 	//Will use the lower arc for firing projecile, else use the higher arc.
 	UPROPERTY(EditDefaultsOnly = True, Category = Firing)
 	bool UseLowArc = true;
@@ -65,10 +70,12 @@ private:
 
 	double LastFiredTime = 0;
 
-
 	void MoveBarrelTowards(FVector);
 
 	void MoveTurretTowards(FVector AimDirection);
 
+	bool IsBarrelMoving();
+
+	FVector AimDirection;
 
 };
