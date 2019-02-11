@@ -5,6 +5,7 @@
 #include "TankBarrelComponent.h"
 #include "TankTurretComponent.h"
 #include "TankMovementComponent.h"
+#include "TankAimingComponent.h"
 #include "TankProjectile.h"
 #include "Engine/World.h"
 
@@ -14,25 +15,12 @@ ATank::ATank()
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	TankAimingComponent = CreateDefaultSubobject<UTankAimingComponent>(FName("Aiming Component"));
-	TankAimingComponent->SetAimLow(UseLowerArc);
-
 }
 
-void ATank::SetBarrelReference(UTankBarrelComponent* BarrelToSet)
+void ATank::BeginPlay()
 {
-	TankAimingComponent->SetBarrelReference(BarrelToSet);
-	Barrel = BarrelToSet;
-}
-
-void ATank::SetTurretReference(UTankTurretComponent* Turret)
-{
-	TankAimingComponent->SetTurretReference(Turret);
-}
-
-void ATank::SetUseLowerArc(bool value)
-{
-	TankAimingComponent->SetAimLow(value);
+	Super::BeginPlay();
+	//TankAimingComponent = FindComponentByClass<UTankAimingComponent>();
 }
 
 void ATank::Fire()
@@ -41,7 +29,7 @@ void ATank::Fire()
 
 	bool IsReloaded = (FPlatformTime::Seconds() - LastFiredTime) >= ReloadTime;
 
-	if (Barrel && IsReloaded && ProjectileBlueprint)
+	if (ensure(Barrel && ProjectileBlueprint) && IsReloaded)
 	{
 		auto Projectile = GetWorld()->SpawnActor<ATankProjectile>(ProjectileBlueprint, Barrel->GetBarrelEndLocation(), Barrel->GetForwardVector().Rotation());
 		Projectile->Launch(ProjectileVelocity);
@@ -52,6 +40,9 @@ void ATank::Fire()
 
 void ATank::AimAt(FVector HitLocation)
 {
-	TankAimingComponent->AimAt(HitLocation, ProjectileVelocity);
+	if (ensure(TankAimingComponent))
+	{
+		TankAimingComponent->AimAt(HitLocation, ProjectileVelocity);
+	}	
 }
 

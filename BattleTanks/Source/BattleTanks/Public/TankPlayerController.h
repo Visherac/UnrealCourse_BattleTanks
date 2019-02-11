@@ -21,9 +21,11 @@ public:
 	virtual void Tick(float) override;
 
 protected:
+	UFUNCTION(BlueprintImplementableEvent, Category = Setup)
+	void AimingComponentFound(UTankAimingComponent* AimingComponent);
+
 	UFUNCTION(BlueprintCallable, Category = Setup)
 	ATank* GetControlledTank() const;
-
 
 private:
 	

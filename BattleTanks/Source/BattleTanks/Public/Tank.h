@@ -22,15 +22,6 @@ public:
 	// Sets default values for this pawn's properties
 	ATank();
 
-	UFUNCTION(BlueprintCallable, Category = Setup)
-	void SetBarrelReference(UTankBarrelComponent* Barrel);
-	
-	UFUNCTION(BlueprintCallable, Category = Setup)
-	void SetTurretReference(UTankTurretComponent* Turret);
-
-	UFUNCTION(BlueprintCallable, Category = Firing)
-	void SetUseLowerArc(bool UseLowerArc);
-
 	UFUNCTION(BlueprintCallable, Category = Firing)
 	void Fire();
 
@@ -43,13 +34,12 @@ protected:
 	//UPROPERTY(BlueprintReadOnly)
 	//UTankMovementComponent* TankMovementComponent = nullptr;
 
+	virtual void BeginPlay() override;
+
 public:	
 	//fire speed in cm.
 	UPROPERTY(EditDefaultsOnly, Category = Firing)
 	float ProjectileVelocity = 10000.0f;
-
-	UPROPERTY(EditDefaultsOnly, Category = Firing)
-	bool UseLowerArc = true;
 
 	UPROPERTY(EditDefaultsOnly, Category = Firing)
 	TSubclassOf<ATankProjectile> ProjectileBlueprint;

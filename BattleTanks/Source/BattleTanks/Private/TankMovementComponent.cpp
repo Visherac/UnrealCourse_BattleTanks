@@ -12,7 +12,7 @@ void UTankMovementComponent::Initialize(UTankTrackComponent* RightTrackToSet, UT
 
 void UTankMovementComponent::IntendMoveForward(float Magnitude)
 {
-	if (RightTrack && LeftTrack)
+	if (ensure(RightTrack && LeftTrack))
 	{
 		RightTrack->SetThrottle(Magnitude);
 		LeftTrack->SetThrottle(Magnitude);
@@ -35,7 +35,7 @@ void UTankMovementComponent::RequestDirectMove(const FVector& MoveVelocity, bool
 
 void UTankMovementComponent::IntendRotateClockwise(float Magnitude)
 {
-	if (RightTrack && LeftTrack)
+	if (ensure(RightTrack && LeftTrack))
 	{
 		RightTrack->SetThrottle(-Magnitude);
 		LeftTrack->SetThrottle(Magnitude);

@@ -3,17 +3,29 @@
 
 #include "TankPlayerController.h"
 #include "Engine/World.h"
-#include "tank.h"
+#include "TankAimingComponent.h"
+#include "Tank.h"
 
 void ATankPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	auto tankPawn = GetControlledTank();
-	if (!tankPawn)
+	auto TankPawn = GetControlledTank();
+	if (!TankPawn)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Tank Player Controller is not controlling a ATank Pawn"))
 	}
+
+	auto AimingComponent = TankPawn->FindComponentByClass<UTankAimingComponent>();
+	if (AimingComponent)
+	{
+		AimingComponentFound(AimingComponent);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Tank Player Controller's Pawn doesn't have a Tank AimingComponent"))
+	}
+	
 }
 
 void ATankPlayerController::Tick(float deltaTime)
@@ -30,7 +42,7 @@ ATank* ATankPlayerController::GetControlledTank() const
 
 void ATankPlayerController::AimTowardsCrosshair()
 {
-	if (!GetControlledTank()) {return;}
+	if (!ensure(GetControlledTank())) {return;}
 
 	FVector HitLocation;
 	if (GetSightRayHitLocation(HitLocation))

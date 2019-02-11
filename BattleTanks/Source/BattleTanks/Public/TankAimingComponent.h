@@ -27,24 +27,27 @@ class BATTLETANKS_API UTankAimingComponent : public UActorComponent
 public:	
 	// Sets default values for this component's properties
 	UTankAimingComponent();
-	void SetBarrelReference(UTankBarrelComponent*);
-	void SetTurretReference(UTankTurretComponent*);
+
+	UFUNCTION(BlueprintCallable, Category = Setup)
+	void Initialize(UTankBarrelComponent* BarrelToSet, UTankTurretComponent* TurretToSet);
+
 	void SetAimLow(bool);
+
 	void AimAt(FVector, float);
 
+	
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = State)
-	EFiringState AimingStatus = EFiringState::Reloading;
+	EFiringState AimingStatus = EFiringState::Locked;
 
+	//Will use the lower arc for firing projecile, else use the higher arc.
+	UPROPERTY(EditDefaultsOnly = True)
+	bool UseLowArc = true;
 
 private:
 	UTankBarrelComponent* Barrel = nullptr;
 	UTankTurretComponent* Turret = nullptr;
 
-	
-	//Will use the lower arc for firing projecile, else use the higher arc.
-	bool UseLowArc = true;
-	
-	void MoveBarrelTowards(FVector AimDirection);
+	void MoveBarrelTowards(FVector );
 	void MoveTurretTowards(FVector AimDirection);
 };
