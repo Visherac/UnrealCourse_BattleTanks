@@ -18,6 +18,7 @@ enum class EFiringState : uint8
 //forward declarations
 class UTankBarrelComponent;
 class UTankTurretComponent;
+class ATankProjectile;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class BATTLETANKS_API UTankAimingComponent : public UActorComponent
@@ -33,21 +34,41 @@ public:
 
 	void SetAimLow(bool);
 
-	void AimAt(FVector, float);
+	void AimAt(FVector);
+
+	UFUNCTION(BlueprintCallable, Category = Firing)
+	void Fire();
+
 
 	
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = State)
 	EFiringState AimingStatus = EFiringState::Locked;
 
-	//Will use the lower arc for firing projecile, else use the higher arc.
-	UPROPERTY(EditDefaultsOnly = True)
-	bool UseLowArc = true;
-
 private:
 	UTankBarrelComponent* Barrel = nullptr;
 	UTankTurretComponent* Turret = nullptr;
+	
+	//Will use the lower arc for firing projecile, else use the higher arc.
+	UPROPERTY(EditDefaultsOnly = True, Category = Firing)
+	bool UseLowArc = true;
 
-	void MoveBarrelTowards(FVector );
+	//fire speed in cm.
+	UPROPERTY(EditDefaultsOnly, Category = Firing)
+	float ProjectileVelocity = 10000.0f;
+
+	UPROPERTY(EditDefaultsOnly, Category = Firing)
+	TSubclassOf<ATankProjectile> ProjectileBlueprint;
+
+	UPROPERTY(EditDefaultsOnly, Category = Firing)
+	float ReloadTime = 3.0f;
+
+	double LastFiredTime = 0;
+
+
+	void MoveBarrelTowards(FVector);
+
 	void MoveTurretTowards(FVector AimDirection);
+
+
 };

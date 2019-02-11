@@ -6,7 +6,7 @@
 #include "GameFramework/PlayerController.h"
 #include "TankPlayerController.generated.h"
 
-class ATank;
+class UTankAimingComponent;
 
 /**
  * 
@@ -24,13 +24,13 @@ protected:
 	UFUNCTION(BlueprintImplementableEvent, Category = Setup)
 	void AimingComponentFound(UTankAimingComponent* AimingComponent);
 
-	UFUNCTION(BlueprintCallable, Category = Setup)
-	ATank* GetControlledTank() const;
-
 private:
-	
+	UTankAimingComponent* AimingComponent = nullptr;
+
 	void AimTowardsCrosshair();
+	
 	bool GetSightRayHitLocation(FVector&) const;
+
 	bool GetLookDirection(FVector & LookDirection) const;
 	
 	UPROPERTY(EditDefaultsOnly)

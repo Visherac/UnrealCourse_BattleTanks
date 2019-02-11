@@ -4,28 +4,16 @@
 #include "TankPlayerController.h"
 #include "Engine/World.h"
 #include "TankAimingComponent.h"
-#include "Tank.h"
 
 void ATankPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	auto TankPawn = GetControlledTank();
-	if (!TankPawn)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Tank Player Controller is not controlling a ATank Pawn"))
-	}
-
-	auto AimingComponent = TankPawn->FindComponentByClass<UTankAimingComponent>();
-	if (AimingComponent)
+	AimingComponent = GetPawn()->FindComponentByClass<UTankAimingComponent>();
+	if (ensure(AimingComponent))
 	{
 		AimingComponentFound(AimingComponent);
 	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Tank Player Controller's Pawn doesn't have a Tank AimingComponent"))
-	}
-	
 }
 
 void ATankPlayerController::Tick(float deltaTime)
@@ -34,21 +22,17 @@ void ATankPlayerController::Tick(float deltaTime)
 	AimTowardsCrosshair();
 }
 
-
-ATank* ATankPlayerController::GetControlledTank() const
-{
-	return Cast<ATank>(GetPawn());
-}
-
 void ATankPlayerController::AimTowardsCrosshair()
 {
-	if (!ensure(GetControlledTank())) {return;}
-
-	FVector HitLocation;
-	if (GetSightRayHitLocation(HitLocation))
+	if (ensure(AimingComponent))
 	{
-		GetControlledTank()->AimAt(HitLocation);
+		FVector HitLocation;
+		if (GetSightRayHitLocation(HitLocation))
+		{
+			AimingComponent->AimAt(HitLocation);
+		}
 	}
+	
 }
 
 //True if hits landscape, location of position hit

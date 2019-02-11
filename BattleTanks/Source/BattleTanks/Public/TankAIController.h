@@ -6,7 +6,7 @@
 #include "AIController.h"
 #include "TankAIController.generated.h"
 
-class ATank;
+class UTankAimingComponent;
 
 /**
  * 
@@ -25,5 +25,8 @@ private:
 	//how clost can the tank get before it stops moving.
 	UPROPERTY(EditDefaultsOnly, Category = Movement)
 	float AcceptanceRadius = 3000; 
+
+	UPROPERTY(EditDefaultsOnly, Category = Aiming)
+	UTankAimingComponent* AimingComponent = nullptr;
 
 };
