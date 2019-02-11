@@ -9,6 +9,7 @@
 UENUM()
 enum class EFiringState : uint8
 {
+	NoAmmo,
 	Reloading,
 	Aiming,
 	Locked
@@ -47,6 +48,9 @@ protected:
 	UPROPERTY(BlueprintReadOnly, Category = State)
 	EFiringState AimingStatus = EFiringState::Locked;
 
+	UPROPERTY(BlueprintReadOnly, Category = State)
+	int Ammo = 3;
+
 	virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction) override;
 
 private:
@@ -68,6 +72,7 @@ private:
 	float ReloadTime = 3.0f;
 
 	double LastFiredTime = 0;
+
 
 	///FUNCTIONS
 	
