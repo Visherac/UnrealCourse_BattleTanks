@@ -1,8 +1,12 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "TankProjectile.h"
+#include "Engine/World.h"
+#include "Kismet/GameplayStatics.h"
+#include "TimerManager.h"
 #include "Particles/ParticleSystemComponent.h"
 #include "Components/StaticMeshComponent.h"
+#include "PhysicsEngine/RadialForceComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 
 // Sets default values
@@ -26,6 +30,8 @@ ATankProjectile::ATankProjectile()
 	ImpactParticle->AttachToComponent(CollisionMesh, FAttachmentTransformRules::KeepRelativeTransform);
 	ImpactParticle->bAutoActivate = false;
 
+	ImpactForce = CreateDefaultSubobject<URadialForceComponent>(FName("Impact Force"));
+	ImpactForce->AttachToComponent(CollisionMesh, FAttachmentTransformRules::KeepRelativeTransform);
 
 }
 
@@ -45,7 +51,26 @@ void ATankProjectile::Launch(float Velocity)
 
 void ATankProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherHitComponent, FVector NormalImpulse, const FHitResult& HitResult)
 {
+	
 	LaunchParticle->Deactivate();
 	ImpactParticle->Activate();
+	ImpactForce->FireImpulse();
+
+	///remove collision mesh instantly to stop collision bugs
+	SetRootComponent(ImpactForce);
+	CollisionMesh->DestroyComponent();
+
+	///apply Damage
+	UGameplayStatics::ApplyRadialDamage(this, DamageAmount, GetActorLocation(), ImpactForce->Radius, UDamageType::StaticClass(), TArray<AActor*>());
+
+	///Remove the rest/particles after a destroy delay
+	FTimerHandle TimerHandle;
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ATankProjectile::OnHitTimerEnd, DestroyDelay);
 }
+
+void ATankProjectile::OnHitTimerEnd()
+{
+	Destroy();
+}
+
 

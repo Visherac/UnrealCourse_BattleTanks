@@ -49,7 +49,7 @@ protected:
 	EFiringState AimingStatus = EFiringState::Locked;
 
 	UPROPERTY(BlueprintReadOnly, Category = State)
-	int32 Ammo = 3;
+	int32 Ammo = 20;
 
 	virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction) override;
 
