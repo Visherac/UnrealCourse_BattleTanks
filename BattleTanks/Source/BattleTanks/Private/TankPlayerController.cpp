@@ -3,6 +3,7 @@
 
 #include "TankPlayerController.h"
 #include "Engine/World.h"
+#include "tank.h"
 #include "TankAimingComponent.h"
 
 void ATankPlayerController::BeginPlay()
@@ -14,6 +15,26 @@ void ATankPlayerController::BeginPlay()
 	{
 		AimingComponentFound(AimingComponent);
 	}
+}
+
+void ATankPlayerController::SetPawn(APawn * NewPawn)
+{
+	Super::SetPawn(NewPawn);
+
+	if (NewPawn)
+	{
+		auto TankPawn = Cast<ATank>(NewPawn);
+		if (ensure(TankPawn))
+		{
+			TankPawn->OnDeath.AddUniqueDynamic(this, &ATankPlayerController::HandleTankDeath);
+		}
+	}
+}
+
+
+void ATankPlayerController::HandleTankDeath()
+{
+	StartSpectatingOnly();
 }
 
 void ATankPlayerController::Tick(float deltaTime)
