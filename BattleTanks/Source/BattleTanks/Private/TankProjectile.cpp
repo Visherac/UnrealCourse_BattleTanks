@@ -20,7 +20,11 @@ ATankProjectile::ATankProjectile()
 	MovementComponent->bAutoActivate = false;
 	
 	LaunchParticle = CreateDefaultSubobject<UParticleSystemComponent>(FName("Launch Blast"));
-	LaunchParticle->AttachTo(CollisionMesh);
+	LaunchParticle->AttachToComponent(CollisionMesh, FAttachmentTransformRules::KeepRelativeTransform);
+
+	ImpactParticle = CreateDefaultSubobject<UParticleSystemComponent>(FName("Impact Blast"));
+	ImpactParticle->AttachToComponent(CollisionMesh, FAttachmentTransformRules::KeepRelativeTransform);
+	ImpactParticle->bAutoActivate = false;
 
 
 }
@@ -30,19 +34,18 @@ ATankProjectile::ATankProjectile()
 void ATankProjectile::BeginPlay()
 {
 	Super::BeginPlay();
-	
-}
-
-// Called every frame
-void ATankProjectile::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
+	CollisionMesh->OnComponentHit.AddDynamic(this, &ATankProjectile::OnHit);
 }
 
 void ATankProjectile::Launch(float Velocity)
 {
 	MovementComponent->SetVelocityInLocalSpace(FVector::ForwardVector * Velocity);
 	MovementComponent->Activate();
+}
+
+void ATankProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherHitComponent, FVector NormalImpulse, const FHitResult& HitResult)
+{
+	LaunchParticle->Deactivate();
+	ImpactParticle->Activate();
 }
 
