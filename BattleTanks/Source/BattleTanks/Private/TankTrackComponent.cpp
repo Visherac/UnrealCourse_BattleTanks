@@ -4,6 +4,8 @@
 #include "Engine/World.h"
 #include "Math/UnrealMathUtility.h"
 #include "Components/PrimitiveComponent.h"
+#include "SprungWheel.h"
+#include "SpawnComponent.h"
 
 
 UTankTrackComponent::UTankTrackComponent()
@@ -14,40 +16,49 @@ UTankTrackComponent::UTankTrackComponent()
 void UTankTrackComponent::BeginPlay()
 {
 	Super::BeginPlay();
-	OnComponentHit.AddDynamic(this, &UTankTrackComponent::OnHit);
 }
 
-void UTankTrackComponent::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherHitComponent, FVector NormalImpulse, const FHitResult& HitResult)
+
+TArray<ASprungWheel*> UTankTrackComponent::GetWheels() const
 {
-	DriveTrack();
-	ApplySidewaysForce();
-	CurrentThrottle = 0.0f;
+	auto Wheels = TArray<ASprungWheel*>();
+	auto Children = TArray<USceneComponent*>();
+	GetChildrenComponents(true, Children);
+	for (auto Child : Children)
+	{
+		auto SpawnChild = Cast<USpawnComponent>(Child);
+		if (SpawnChild)
+		{
+			AActor* SpawnedActor = SpawnChild->GetSpawnedActor();
+			if (SpawnedActor)
+			{
+				auto SprungWheelActor = Cast<ASprungWheel>(SpawnedActor);
+				if (SprungWheelActor)
+				{
+					Wheels.Add(SprungWheelActor);
+				}
+			}
+		}
+	}
+	return Wheels;
 }
-
-void UTankTrackComponent::ApplySidewaysForce()
-{
-	//remove strafe slipping.
-	//F = MA
-	float SlippageAmount = FVector::DotProduct(GetComponentVelocity(), GetRightVector());
-	auto DeltaTime = GetWorld()->GetDeltaSeconds();
-	FVector SlippageCorrectionAcceleration = -SlippageAmount / DeltaTime * GetRightVector();
-	auto TankRoot = Cast<UPrimitiveComponent>(GetOwner()->GetRootComponent());
-	auto SlippageCorrectionForce = TankRoot->GetMass() * SlippageCorrectionAcceleration / 2; // divide because 2 tank tracks
-	TankRoot->AddForce(SlippageCorrectionForce);
-}
-
-
 
 void UTankTrackComponent::SetThrottle(float Throttle)
 {
-	CurrentThrottle = FMath::Clamp<float>(CurrentThrottle + Throttle, -1.0f, 1.0f);
+	float CurrentThrottle = FMath::Clamp<float>(Throttle, -1.0f, 1.0f);
+	DriveTrack(CurrentThrottle);
 }
 
-void UTankTrackComponent::DriveTrack()
+void UTankTrackComponent::DriveTrack(float CurrentThrottle)
 {
-	auto RootComponent = Cast<UPrimitiveComponent>(GetOwner()->GetRootComponent());
-	auto Force = DrivingForce * CurrentThrottle * GetForwardVector();
-	auto ForceLocation = GetComponentLocation();
-
-	RootComponent->AddForceAtLocation(Force, ForceLocation);
+	auto Force = DrivingForce * CurrentThrottle;
+	auto Wheels = GetWheels();
+	if (Wheels.Num() > 0)
+	{
+		auto ForcePerWheel = Force / Wheels.Num();
+		for (auto Wheel : Wheels)
+		{
+			Wheel->AddDrivingForce(ForcePerWheel);
+		}
+	}
 }

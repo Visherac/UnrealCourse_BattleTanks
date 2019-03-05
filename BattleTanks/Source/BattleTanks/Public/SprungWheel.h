@@ -6,7 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "SprungWheel.generated.h"
 
-class UStaticMeshComponent;
+class USphereComponent;
 class UPhysicsConstraintComponent;
 
 UCLASS()
@@ -18,25 +18,35 @@ public:
 	// Sets default values for this actor's properties
 	ASprungWheel();
 
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
+
+	void AddDrivingForce(float ForwardMagnitude);
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
-
+	
 private:
 	//components
 	UPROPERTY(VisibleAnywhere, Category = Components)
-	UStaticMeshComponent* Wheel = nullptr;
+	USphereComponent* Wheel = nullptr;
 	
 	UPROPERTY(VisibleAnywhere, Category = Components)
-	UStaticMeshComponent* Mass = nullptr;
+	USphereComponent* Axle = nullptr;
 
 	UPROPERTY(VisibleAnywhere, Category = Components)
-	UPhysicsConstraintComponent* Constraint = nullptr;
+	UPhysicsConstraintComponent* SpringConstraint = nullptr;
 
+	UPROPERTY(VisibleAnywhere, Category = Components)
+	UPhysicsConstraintComponent* WheelConstraint = nullptr;
+
+	UFUNCTION()
+	void OnHit(UPrimitiveComponent * HitComponent, AActor * OtherActor, UPrimitiveComponent * OtherComp, FVector NormalImpulse, const FHitResult & Hit);
+
+	void ApplyForce();
+
+	float TotalForceThisFrame = 0.0f;
 
 };

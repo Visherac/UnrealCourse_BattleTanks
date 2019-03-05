@@ -23,11 +23,11 @@ void USpawnComponent::BeginPlay()
 	// ...
 	if(SpawnClass)
 	{
-		auto Spawned = GetWorld()->SpawnActorDeferred<AActor>(SpawnClass, GetComponentTransform());
-		if (Spawned)
+		SpawnedActor = GetWorld()->SpawnActorDeferred<AActor>(SpawnClass, GetComponentTransform());
+		if (SpawnedActor)
 		{
-			Spawned->AttachToComponent(this, FAttachmentTransformRules::KeepWorldTransform);
-			UGameplayStatics::FinishSpawningActor(Spawned, GetComponentTransform());
+			SpawnedActor->AttachToComponent(this, FAttachmentTransformRules::KeepWorldTransform);
+			UGameplayStatics::FinishSpawningActor(SpawnedActor, GetComponentTransform());
 		}
 		else
 		{
@@ -49,5 +49,10 @@ void USpawnComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// ...
+}
+
+AActor * USpawnComponent::GetSpawnedActor() const
+{
+	return SpawnedActor;
 }
 

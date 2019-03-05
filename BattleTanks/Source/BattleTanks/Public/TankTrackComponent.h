@@ -9,6 +9,8 @@
 /**
  * 
  */
+class ASprungWheel;
+
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class BATTLETANKS_API UTankTrackComponent : public UStaticMeshComponent
 {
@@ -29,15 +31,11 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
-	
-	void ApplySidewaysForce();
-	
+
+	TArray<ASprungWheel*> GetWheels() const;
+
 private:
-	UFUNCTION()
-	void OnHit(UPrimitiveComponent * HitComponent, AActor * OtherActor, UPrimitiveComponent * OtherHitComponent, FVector NormalImpulse, const FHitResult &HitResult);
-
-	void DriveTrack();
-
-	float CurrentThrottle = 0.0f;
+	
+	void DriveTrack(float CurrentThrottle);
 
 };

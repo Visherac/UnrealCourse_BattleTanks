@@ -27,8 +27,11 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "Spawning")
 	TSubclassOf<AActor> SpawnClass;
 
+	UFUNCTION(BlueprintCallable, Category = "Spawning")
+	AActor* GetSpawnedActor() const;
+
 private:
-	
+	AActor* SpawnedActor = nullptr;
 		
 	
 };
